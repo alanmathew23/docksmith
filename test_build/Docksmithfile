@@ -1,0 +1,5 @@
+FROM alpine:3.18
+WORKDIR /app
+COPY . .
+RUN echo hello
+CMD echo done
