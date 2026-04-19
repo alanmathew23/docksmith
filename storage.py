@@ -270,8 +270,12 @@ def ExtractLayers(layer_digests: list, dest_dir: str) -> None:
 
         # FIX: use filter='tar' to avoid DeprecationWarning on Python 3.12+
         # 'tar' preserves symlinks and special files needed by real image layers
-        with tarfile.open(path, "r:") as t:
-            t.extractall(path=dest_dir, filter="tar")
+        with tarfile.open(path, "r:*") as t:
+            for member in t.getmembers():
+                if member.issym() or member.islnk():
+                    continue
+
+                t.extract(member, path=dest_dir)
 
 
 def ListImages() -> list:
