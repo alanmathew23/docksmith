@@ -11,4 +11,6 @@ WORKDIR /app
 ENV APP_NAME=docksmith-sample
 COPY . .
 RUN echo "Setting up $APP_NAME"
+RUN echo "secret" > /app/secret.txt
 CMD ["sh", "app.sh"]
+
