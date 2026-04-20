@@ -15,7 +15,7 @@ from storage import (
 )
 
 from cache import compute_cache_key, hash_copy_sources
-from stubs import RunIsolated
+from runtime import RunIsolated
 from parser import parse as parse_docksmithfile, expand_copy_srcs
 
 

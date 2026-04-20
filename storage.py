@@ -272,9 +272,6 @@ def ExtractLayers(layer_digests: list, dest_dir: str) -> None:
         # 'tar' preserves symlinks and special files needed by real image layers
         with tarfile.open(path, "r:*") as t:
             for member in t.getmembers():
-                if member.issym() or member.islnk():
-                    continue
-
                 t.extract(member, path=dest_dir)
 
 
