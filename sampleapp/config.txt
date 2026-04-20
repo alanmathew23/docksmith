@@ -1,0 +1,4 @@
+# config.txt — static configuration bundled into the sampleapp image via COPY
+app.name=docksmith-sample
+app.version=1.0.0
+app.offline=true

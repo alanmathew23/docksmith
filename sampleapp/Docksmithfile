@@ -1,0 +1,14 @@
+# sampleapp/Docksmithfile
+#
+# Demonstrates all 6 Docksmith instructions:
+#   FROM, WORKDIR, ENV, COPY, RUN, CMD
+#
+# The APP_NAME environment variable is intentionally overridable at run-time:
+#   python3 main.py run -e APP_NAME=myservice sampleapp:latest
+
+FROM alpine:3.18
+WORKDIR /app
+ENV APP_NAME=docksmith-sample
+COPY . .
+RUN echo "Setting up $APP_NAME"
+CMD ["sh", "app.sh"]
