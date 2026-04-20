@@ -203,10 +203,11 @@ def _raises_parse_error(content, lineno=None):
         shutil.rmtree(d)
         return False, None
     except ParseError as e:
-        shutil.rmtree(d)
-        return True, e
-    finally:
         shutil.rmtree(d, ignore_errors=True)
+        return True, e
+    except Exception:
+        shutil.rmtree(d, ignore_errors=True)
+        raise
 
 ok, err = _raises_parse_error("RUN echo hi\n")
 check("First instruction not FROM raises ParseError",  ok)
@@ -508,11 +509,15 @@ _, _nc_m2 = _build("nocache:v1", _nc_ctx, no_cache=True)
 # Because nc.txt content is the same, the layer content is identical,
 # so digests will actually be the same (reproducible builds).
 # The important thing is the cache file was NOT updated after --no-cache.
-_nc_cache_after = json.load(open(_cache_file)) if os.path.exists(_cache_file) else {}
-_nc_cache_count_before = len(json.load(open(_cache_file)))  # loaded after first build
+with open(_cache_file) as _f:
+    _nc_cache_count_before = len(json.load(_f))  # loaded after first build
 
 _, _nc_m3 = _build("nocache:v1", _nc_ctx, no_cache=True)
-_nc_cache_count_after = len(json.load(open(_cache_file))) if os.path.exists(_cache_file) else 0
+if os.path.exists(_cache_file):
+    with open(_cache_file) as _f:
+        _nc_cache_count_after = len(json.load(_f))
+else:
+    _nc_cache_count_after = 0
 
 check("--no-cache: cache not grown by no-cache build",
       _nc_cache_count_before == _nc_cache_count_after)

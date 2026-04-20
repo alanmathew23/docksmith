@@ -1,5 +1,4 @@
 import os
-import glob as _glob_mod
 import time
 import json
 import tempfile
